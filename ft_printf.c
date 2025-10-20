@@ -50,19 +50,17 @@ int parse_format(const char *format, va_list ap)
 	result = 0;
 	while(*format)
 	{
-		if(*format != '%')
+		while (*format && *format == '%')
+		{
+			format++;
+			result += handle_format(format, ap);
+			format++;
+		}
+		if (*format != '%')
 		{
 			len = find_percent(format, '%');
-			write(1, format, len);
-			result += len;
+			result += write(1, format, len);
 			format += len;
-		}
-		else if (*format == '%')
-		{
-			format++;
-			len = handle_format(format, ap);
-			result += len;
-			format++;
 		}
 	}
 	return (result);
@@ -81,7 +79,7 @@ int	handle_format(const char *specifier, va_list ap)
 	else if (*specifier == 'u')
 		return (ft_print_unsigned_integer(va_arg(ap, unsigned int)));	// negative integers should be printed as large positive numbers
 	else if (*specifier == 'x' || *specifier == 'X')
-		return (ft_print_hexadecimal(va_arg(ap, unsigned long), *specifier));
+		return (ft_print_hexadecimal(va_arg(ap, unsigned int), *specifier));
 	else if (*specifier == '%')
 		return (ft_print_percent());
 	return (0);
@@ -92,21 +90,26 @@ int	handle_format(const char *specifier, va_list ap)
 int	main()
 {
 	int result;
-	char *s	= "POINTER";
-	long h	= 0x9e407d4e;
-	long h2 = 0x10dc4ff0e;
-	int sh	= 0xe;
-	int i	= 0x10;
-	result	= ft_printf("Hello, World!%c %sHello\n", 'A', "1234");
-	printf(" ft_printf: %d\n", result);
-	result = ft_printf("%d %i %u\n", +123, -123, -123);
-	printf(" ft_printf: %d\n", result);
-	result = ft_printf("%p %x %X %x %i %%\n", s, h, h2, sh, i);
-	printf("%d\n", result);
-	result =    printf("Hello, World!%c %sHello\n", 'A', "1234");
-	printf("std_printf: %d\n", result);
-	result = 	printf("%d %i %u\n", +123, -123, -123);
-	printf("std_printf: %d\n", result);
-	result = printf("%p %lx %lX %x %i %%\n", s, h, h2, sh, i);
-	printf("%d\n", result);
+	// char *s	= "POINTER";
+	// long h	= 0x9e407d4e;
+	// long h2 = 0x10dc4ff0e;
+	// int sh	= 0xe;
+	// int i	= 0x10;
+	// result	= ft_printf("Hello, World!%c %sHello\n", 'A', "1234");
+	// printf(" ft_printf: %d\n", result);
+	// result = ft_printf("%d %i %u\n", +123, -123, -123);
+	// printf(" ft_printf: %d\n", result);
+	// result = ft_printf("%p %x %X %x %i %%\n", s, h, h2, sh, i);
+	// printf("%d\n", result);
+	// result =    printf("Hello, World!%c %sHello\n", 'A', "1234");
+	// printf("std_printf: %d\n", result);
+	// result = 	printf("%d %i %u\n", +123, -123, -123);
+	// printf("std_printf: %d\n", result);
+	// result = printf("%p %lx %lX %x %i %%\n", s, h, h2, sh, i);
+	// printf("%d\n", result);
+
+	result = ft_printf("%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %c%%", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0 ,0, 42, 0);
+	printf("\n%d\n", result);
+	result =  	printf("%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %c%%", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0 ,0, 42, 0);
+	printf("\n%d\n", result);
 }

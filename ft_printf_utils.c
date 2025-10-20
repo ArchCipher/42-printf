@@ -65,7 +65,7 @@ int	ft_print_unsigned_integer(unsigned int u)
 	return (ft_u_putnbr_base_fd(u, 'u', 1));
 }
 
-int	ft_print_hexadecimal(unsigned long x, char specifier)
+int	ft_print_hexadecimal(unsigned int x, char specifier)
 {
 	return (ft_u_putnbr_base_fd(x, specifier, 1));	
 }
@@ -87,6 +87,8 @@ int    ft_u_putnbr_base_fd(unsigned long n, char specifier, int fd)
 		base = 10;
 	i = BUF_SIZE;
 	num[i] = '\0';
+	if (n == 0)
+		num[--i] = '0';
 	while(n)
     {
 		if (specifier == 'x')

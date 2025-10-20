@@ -22,7 +22,6 @@ MSRCS = \
 	   printf printf_utils
 SRCS = $(addprefix ft_, $(addsuffix .c, $(MSRCS)))
 OBJS	= $(SRCS:.c=.o)
-LIBOBJS = $(wildcard $(LIBDIR)/*.o)
 
 # BSRCS = \
 # BONUS_SRCS = $(addprefix ft_, $(addsuffix .c, $(BSRCS)))
@@ -31,16 +30,17 @@ LIBOBJS = $(wildcard $(LIBDIR)/*.o)
 %.o: %.c
 	$(CC) $(FLAGS) $(ALL_HEADERS) -c $< -o $@
 
-all: $(LIBNAME) $(NAME)
+all: $(NAME)
 
 $(LIBNAME):
 	$(MAKE) bonus -C $(LIBDIR)
 
-$(NAME): $(OBJS) $(LIBOBJS)
-	ar rcs $@ $^
+$(NAME): $(OBJS) $(LIBNAME)
+	cp $(LIBNAME) $@
+	ar rcs $@ $(OBJS)
 
 test: $(NAME)
-	$(CC) $(FLAGS) -g $(ALL_HEADERS) $(SRCS) $(LIBNAME) $(NAME) -o a.out
+	$(CC) $(FLAGS) -g $(ALL_HEADERS) $(SRCS) $(NAME) -o a.out
 	./a.out
 
 clean:
