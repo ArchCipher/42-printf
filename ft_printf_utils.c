@@ -1,7 +1,5 @@
 # include "ft_printf.h"
 
-# include <stdio.h> // printf - remove
-
 /*
 DESCRIPTION
 	Locates the first occurrence of the character c in the string s.
@@ -18,76 +16,86 @@ int	find_percent(const char *s, int c)
 	return (n);
 }
 
+/*
+DESCRIPTION
+	Prints a single char and returns the number of characters printed.
+*/
+
 int	ft_print_char(char c)
 {
-	write(1, &c, 1);
-	return (1);
+	return (write(1, &c, 1));
 }
+
+/*
+DESCRIPTION
+	Prints a string and returns the number of characters printed.
+*/
 
 int	ft_print_string(char *s)
 {
-	int len;
-
 	if (!s)
-		write(1, "(null)", 6);
-	len = ft_strlen(s);
-	write(1, s, len);
-	return (len);
+		return(write(1, "(null)", 6));
+	return (write(1, s, ft_strlen(s)));
 }
+
+/*
+DESCRIPTION
+	Prints a void pointer argument in hexadecimal format and returns the number of characters printed.
+*/
 
 int	ft_print_pointer(void *p)
 {
-	int	len;
-
-	write(1, "0x", 2);
-	len = 2;
-	len += ft_puthex_fd((unsigned long)p, 'x', 1);
-	return (len);
+	return (write(1, "0x", 2) + ft_u_putnbr_base_fd((unsigned long)p, 'x', 1));
 }
 
-int	ft_print_integer(int i)
+/*
+DESCRIPTION
+	%d Prints a signed decimal (base 10) number.
+	%i Prints an signed integer (can be base 8 or 16) in base 10.
+	Returns the number of characters printed.
+*/
+
+int	ft_print_integer(int i)		// should be able to detect base for %i- why does it automatically do that?
 {
-	ft_putnbr_fd(i, 1);
-	return ((int)ft_numlen(i, 10));
+	return (ft_putnbr_fd(i, 1), (int)ft_numlen(i, 10));
 }
 
-int	ft_print_unsigned_integer(int i)
+int	ft_print_unsigned_integer(unsigned int u)
 {
-	unsigned int u;
-	u = (unsigned int) i;
-	ft_putnbr_fd(u, 1);
-	return ((int)ft_numlen(u, 10));
+	return (ft_u_putnbr_base_fd(u, 'u', 1));
 }
 
 int	ft_print_hexadecimal(unsigned long x, char specifier)
 {
-	int len;
-
-	len = ft_puthex_fd(x, specifier, 1);	//lx should print 10 before the value?
-	return (len);	
-}
-
-int    ft_puthex_fd(unsigned long n, char specifier, int fd)
-{
-	char	num[20];
-	size_t	i;
-
-	i = 20;
-	num[i] = '\0';
-	while(n)
-    {
-		if (specifier == 'x')
-			num[--i] = LOWER_HEX[n % 16];
-		else
-			num[--i] = UPPER_HEX[n % 16];
-		n /= 16;
-    }
-	write(fd, num + i, 20 - i);
-	return (20 - i);
+	return (ft_u_putnbr_base_fd(x, specifier, 1));	
 }
 
 int	ft_print_percent(void)
 {
-	write(1, "%", 1);
-	return (1);
+	return (write(1, "%", 1));
+}
+
+int    ft_u_putnbr_base_fd(unsigned long n, char specifier, int fd)
+{
+	char	num[BUF_SIZE];
+	size_t	i;
+	int	base;
+
+	if (specifier == 'x' || specifier == 'X')
+		base = 16;
+	else
+		base = 10;
+	i = BUF_SIZE;
+	num[i] = '\0';
+	while(n)
+    {
+		if (specifier == 'x')
+			num[--i] = LOWER_HEX[n % base];
+		else if (specifier == 'X')
+			num[--i] = UPPER_HEX[n % base];
+		else
+			num[--i] = DECIMAL[n % base];
+		n /= base;
+    }
+	return (write(fd, num + i, BUF_SIZE - i));
 }

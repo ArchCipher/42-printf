@@ -40,7 +40,7 @@ $(NAME): $(OBJS) $(LIBOBJS)
 	ar rcs $@ $^
 
 test: $(NAME)
-	$(CC) $(FLAGS) $(ALL_HEADERS) $(SRCS) $(LIBNAME) $(NAME) -o a.out
+	$(CC) $(FLAGS) -g $(ALL_HEADERS) $(SRCS) $(LIBNAME) $(NAME) -o a.out
 	./a.out
 
 clean:

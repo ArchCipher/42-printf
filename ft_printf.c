@@ -80,10 +80,8 @@ int	handle_format(const char *specifier, va_list ap)
 		return (ft_print_integer(va_arg(ap, int)));
 	else if (*specifier == 'u')
 		return (ft_print_unsigned_integer(va_arg(ap, unsigned int)));	// negative integers should be printed as large positive numbers
-	else if (*specifier == 'x')	// should it be long?
-		return (ft_print_hexadecimal(va_arg(ap, unsigned int), *specifier)); // to LOWER_HEX
-	else if (*specifier == 'X')
-		return (ft_print_hexadecimal(va_arg(ap, unsigned int), *specifier)); // to UPPER_HEX
+	else if (*specifier == 'x' || *specifier == 'X')
+		return (ft_print_hexadecimal(va_arg(ap, unsigned long), *specifier));
 	else if (*specifier == '%')
 		return (ft_print_percent());
 	return (0);
@@ -95,14 +93,20 @@ int	main()
 {
 	int result;
 	char *s	= "POINTER";
-	long h	= 0x10e407d4e;
+	long h	= 0x9e407d4e;
+	long h2 = 0x10dc4ff0e;
 	int sh	= 0xe;
-	result	= ft_printf("Hello, World!%c %sHello\n%d %i %u\n", 'A', "1234", +123, -123, -123);
+	int i	= 0x10;
+	result	= ft_printf("Hello, World!%c %sHello\n", 'A', "1234");
 	printf(" ft_printf: %d\n", result);
-	result = ft_printf("%p %x %X %x %%\n", s, h, h, sh);
+	result = ft_printf("%d %i %u\n", +123, -123, -123);
+	printf(" ft_printf: %d\n", result);
+	result = ft_printf("%p %x %X %x %i %%\n", s, h, h2, sh, i);
 	printf("%d\n", result);
-	result =    printf("Hello, World!%c %sHello\n%d %i %u\n", 'A', "1234", +123, -123, -123);
+	result =    printf("Hello, World!%c %sHello\n", 'A', "1234");
 	printf("std_printf: %d\n", result);
-	result = printf("%p %lx %lX %x %%\n", s, h, h, sh);
+	result = 	printf("%d %i %u\n", +123, -123, -123);
+	printf("std_printf: %d\n", result);
+	result = printf("%p %lx %lX %x %i %%\n", s, h, h2, sh, i);
 	printf("%d\n", result);
 }

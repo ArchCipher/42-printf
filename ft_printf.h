@@ -21,6 +21,8 @@
 # define LOWER_HEX "0123456789abcdef"
 # define UPPER_HEX "0123456789ABCDEF"
 # define OCTAL "01234567"
+# define BUF_SIZE 20
+
 
 // ft_printf
 int	ft_printf(const char *, ...);
@@ -33,7 +35,7 @@ int	ft_print_char(char c);
 int	ft_print_string(char *s);
 int	ft_print_pointer(void *p);
 int	ft_print_integer(int i);
-int	ft_print_unsigned_integer(int u);
+int	ft_print_unsigned_integer(unsigned int u);
 int	ft_print_hexadecimal(unsigned long x, char);
 int	ft_print_percent(void);
 
@@ -41,6 +43,8 @@ int	ft_print_percent(void);
 
 // ft_printf_utils
 int     find_percent(const char *s, int c);
-int     ft_puthex_fd(unsigned long n, char, int fd);
+int     ft_u_putnbr_base_fd(unsigned long n, char, int fd);
+size_t  ft_l_numlen(long n, int base);
+// int    ft_putnbr_base_fd(unsigned long n, char specifier, int fd);
 
 #endif
