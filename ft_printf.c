@@ -58,7 +58,7 @@ int parse_format(const char *format, va_list ap)
 		}
 		if (*format != '%')
 		{
-			len = find_percent(format, '%');
+			len = strcspn_char(format, '%');
 			result += write(1, format, len);
 			format += len;
 		}
@@ -113,3 +113,5 @@ int	main()
 	result =  	printf("%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %c%%", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0 ,0, 42, 0);
 	printf("\n%d\n", result);
 }
+
+/// result greater than int max check-----

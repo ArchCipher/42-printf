@@ -34,7 +34,7 @@ int     ft_print_percent(void);
 // int	ft_print_hexadecimal_upper(va_list args);
 
 // ft_printf_utils
-int     find_percent(const char *s, int c);
+size_t     strcspn_char(const char *s, int c);
 int     ft_u_putnbr_base_fd(unsigned long n, char, int fd);
 size_t  ft_l_numlen(long n, int base);
 

@@ -1,14 +1,18 @@
 # include "ft_printf.h"
 
 /*
-DESCRIPTION
-	Locates the first occurrence of the character c in the string s.
-	Returns length of string upto byte located or the entire length of the string.
+DESCRIPTION:
+    Returns the number of bytes in the initial part of 's' which precedes
+	the first occurrence of character 'c'. If 'c' is not found, returns
+	the length of the string.
+
+Equivalent to a simplified strcspn(const char *s, const char *charset);.
 */
 
-int	find_percent(const char *s, int c)
+
+size_t	strcspn_char(const char *s, int c)
 {
-	int	n;
+	size_t	n;
 
 	n = 0;
 	while(s[n] && s[n] != (unsigned char)c)
