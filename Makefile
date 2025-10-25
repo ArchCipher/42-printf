@@ -1,8 +1,4 @@
-# If your project allows you to use your libft, you must copy its sources and its
-# associated Makefile into a libft folder. Your project’s Makefile must compile
-# the library by using its Makefile, then compile the project.
-
-# Turn in files Makefile, *.h, */*.h, *.c, */*.c
+#add header for all files
 
 #			Library and Project names
 NAME		= libftprintf.a

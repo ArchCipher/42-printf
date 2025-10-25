@@ -13,10 +13,8 @@
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include "../libft/libft.h"
 # include <limits.h> // INT_MAX
-# include <stdarg.h> // va_start, va_arg, va_copy, va_end
-// # include <stdlib.h> // malloc, free --- not used to be removed
+# include <stdarg.h> // va_start, va_arg, va_end
 # include <unistd.h> // write
 
 # define FMT_SPEC "cspdiuxX%"
@@ -43,6 +41,7 @@ typedef struct s_fmt
 // ft_printf
 int		ft_printf(const char *fmt, ...);
 int		ft_vprintf(const char *fmt, va_list ap);
+int		print_literal(const char **fmt);
 size_t	ft_strcspn_char(const char *s, int c);
 
 // lexer
@@ -72,7 +71,3 @@ char	*ft_strchr(const char *s, int c);
 int		ft_atoi(const char *str);
 
 #endif
-
-// result greater than int max check----- and return -1?
-
-// check overflow for unsigned int conversion for INT_MIN

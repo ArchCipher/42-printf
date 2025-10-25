@@ -26,8 +26,7 @@
 		Returns the number of characters printed.
 		The printf utility exits 0 on success, and >0 if an error occurs.
 	EXTERNAL FUNC(S)
-		malloc, free, write, va_start, va_arg, va_copy, va_end
-		ft_libft
+		write, va_start, va_arg, va_end
 */
 
 /*
@@ -58,7 +57,6 @@ int	ft_vprintf(const char *fmt, va_list ap)
 {
 	int		ret;
 	ssize_t	written;
-	size_t	len;
 	t_fmt	flag;
 
 	ret = 0;
@@ -72,16 +70,27 @@ int	ft_vprintf(const char *fmt, va_list ap)
 			written = handle_spec(ap, &flag);
 		}
 		else
-		{
-			len = ft_strcspn_char(fmt, '%');
-			written = write(FD, fmt, len);
-			fmt += len;
-		}
+			written = print_literal(&fmt);
 		if (written < 0 || written > INT_MAX || (int)written > (INT_MAX - ret))
 			return (-1);
 		ret += written;
 	}
 	return (ret);
+}
+
+// check for char overflow when direct printing
+
+int print_literal(const char **fmt)
+{
+	ssize_t	written;
+	size_t	len;
+
+	len = ft_strcspn_char(*fmt, '%');
+	if (len > INT_MAX)
+		return (-1);
+	written = write(FD, *fmt, len);
+	*fmt += len;
+	return (written);
 }
 
 /*

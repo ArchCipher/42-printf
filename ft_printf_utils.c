@@ -55,13 +55,15 @@ char	*ft_strchr(const char *s, int c)
 
 int	ft_atoi(const char *str)
 {
-	long	num;
+	int	num;
 
 	num = 0;
 	while (ft_isdigit(*str))
 	{
+		if (num > INT_MAX / 10)
+			return (INT_MAX);
 		num = (num * 10) + (*str - '0');
 		str++;
 	}
-	return ((int)(num));
+	return (num);
 }

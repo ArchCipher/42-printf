@@ -17,8 +17,6 @@ DESCRIPTION
 	Converts unsigned number to string in given base and prints it with formatting
 	(sign/prefix, width, precision, alignment).
 	Returns the number of characters printed or -1 on error.
-
-	If precision is 0 and number is 0, the number is not printed (except for p).
 */
 
 int	ft_itoa_base(unsigned long long n, int base, t_fmt flag)
@@ -26,7 +24,6 @@ int	ft_itoa_base(unsigned long long n, int base, t_fmt flag)
 	char	num[BUF_SIZE + 1];
 	int		i;
 	int		prefix_len;
-	int		num_len;
 
 	i = BUF_SIZE;
 	num[i] = '\0';
@@ -47,10 +44,7 @@ int	ft_itoa_base(unsigned long long n, int base, t_fmt flag)
 			num[--i] = DECIMAL[n % base];
 		n /= base;
 	}
-	num_len = BUF_SIZE - i;
-	if (flag.dot && flag.precision == 0 && num[i] == '0')
-		num_len = 0;
-	return (print_nbr(num + i, num_len, prefix_len, flag));
+	return (print_nbr(num + i, BUF_SIZE - i, prefix_len, flag));
 }
 
 /*
@@ -65,6 +59,14 @@ DESCRIPTION
 		[prefix] [width_pad] [number]
 	Left alignment:
 		[prefix] [precision_zeros] [number] [width_pad]
+
+	If precision is 0 and number is 0, the number is not printed (except for p).
+*/
+
+/*
+if (flag.width == INT_MAX || flag.precision == INT_MAX)
+return (-1);
+overflow_check for numbers.
 */
 
 int print_nbr(char *num, int num_len, int prefix_len, t_fmt flag)
@@ -78,6 +80,8 @@ int print_nbr(char *num, int num_len, int prefix_len, t_fmt flag)
 	width_pad = 0;
 	precision_pad = 0;
 	num_written = 0;
+	if (flag.dot && flag.precision == 0 && *num == '0')
+		num_len = 0;
 	pad_len = max (0, flag.width - (prefix_len + max(num_len, flag.precision)));
 	if (flag.align != '-' && flag.pad == ' ')
 		width_pad = print_pad(pad_len, flag.pad);
