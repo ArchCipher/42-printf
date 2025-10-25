@@ -6,8 +6,6 @@
 
 #			Library and Project names
 NAME		= libftprintf.a
-LIBPATH		= ./libft
-LIBNAME		= $(LIBPATH)/libft.a
 
 #			Compiler and Flags
 CC			= cc
