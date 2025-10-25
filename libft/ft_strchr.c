@@ -1,44 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/22 12:38:21 by kmurugan          #+#    #+#             */
-/*   Updated: 2025/10/23 18:57:20 by kmurugan         ###   ########.fr       */
+/*   Created: 2025/10/16 18:26:58 by kmurugan          #+#    #+#             */
+/*   Updated: 2025/10/16 18:57:49 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-
-int	ft_isdigit(int c)
-{
-	return (c >= '0' && c <= '9');
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	n;
-
-	n = 0;
-	while (s[n])
-		n++;
-	return (n);
-}
-
-void	*ft_memset(void *b, int c, size_t len)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < len)
-	{
-		((unsigned char *)b)[i] = (unsigned char)c;
-		i++;
-	}
-	return (b);
-}
+#include "libft.h"
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -51,17 +23,4 @@ char	*ft_strchr(const char *s, int c)
 	if ((unsigned char)c == '\0')
 		return ((char *)s);
 	return (NULL);
-}
-
-int	ft_atoi(const char *str)
-{
-	long	num;
-
-	num = 0;
-	while (ft_isdigit(*str))
-	{
-		num = (num * 10) + (*str - '0');
-		str++;
-	}
-	return ((int)(num));
 }

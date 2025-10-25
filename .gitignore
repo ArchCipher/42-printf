@@ -1,3 +1,4 @@
 printfTester/
 *.out
 *.out.dSYM/
+.DS_Store

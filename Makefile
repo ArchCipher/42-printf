@@ -6,8 +6,8 @@
 
 #			Library and Project names
 NAME		= libftprintf.a
-LIBDIR		= ../libft
-LIBNAME		= $(LIBDIR)/libft.a
+LIBPATH		= ./libft
+LIBNAME		= $(LIBPATH)/libft.a
 
 #			Compiler and Flags
 CC			= cc
@@ -15,42 +15,34 @@ FLAGS		= -Wall -Werror -Wextra
 SFLAGS		= -fsanitize=address
 
 #			Headers
-ALL_HEADERS	= -I. -I$(LIBDIR)
+ALL_HEADERS	= -I.
 
 #			Sources & Objects
 MSRCS = \
-	   printf printf_utils
+	   printf parser print_types print_int printf_utils
 SRCS = $(addprefix ft_, $(addsuffix .c, $(MSRCS)))
 OBJS	= $(SRCS:.c=.o)
-
-# BSRCS = \
-# BONUS_SRCS = $(addprefix ft_, $(addsuffix .c, $(BSRCS)))
-# BONUS_OBJS	= $(BONUS_SRCS:.c=.o)
 
 %.o: %.c
 	$(CC) $(FLAGS) $(ALL_HEADERS) -c $< -o $@
 
 all: $(NAME)
 
-$(LIBNAME):
-	$(MAKE) bonus -C $(LIBDIR)
-
-$(NAME): $(OBJS) $(LIBNAME)
-	cp $(LIBNAME) $@
+$(NAME): $(OBJS)
 	ar rcs $@ $(OBJS)
 
+bonus: $(NAME)
+
 test: $(NAME)
-	$(CC) $(FLAGS) -g $(ALL_HEADERS) $(SRCS) $(NAME) -o a.out
-	./a.out
+	$(CC) $(FLAGS) -g $(ALL_HEADERS) $(SRCS) $(NAME) main.c -o a.out
+	./a.out | cat -e
 
 clean:
 	rm -f $(OBJS)
-	$(MAKE) -C $(LIBDIR) clean
 
 fclean: clean
 	rm -f $(NAME)
-	$(MAKE) -C $(LIBDIR) fclean
 
 re: fclean all
 
-.PHONY: all lib clean fclean test
+.PHONY: all clean fclean test

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/22 12:27:53 by kmurugan          #+#    #+#             */
+/*   Updated: 2025/10/23 19:09:27 by kmurugan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 /*
@@ -26,92 +38,66 @@
 
 	VARIADIC FUNCTIONS / MACROS
 	void	va_start(va_list ap, last);			// initializes ap
-	type	va_arg(va_list ap, type);			// explands to an expression that has type and value of the next arg in the call. returns n bytes after 1st parameter (based on the input type specified)
+	type	va_arg(va_list ap, type);	// returns n bytes after 1st param
 	void	va_copy(va_list dest, va_list src)	//
 	void	va_end(va_list ap);					// frees the ap
 */
 
-int ft_printf(const char *format, ...)
+int	ft_printf(const char *fmt, ...)
 {
+	int		ret;
 	va_list	ap;
-	int		result;
 
-	va_start(ap, format);
-	result = parse_format(format, ap);
+	va_start(ap, fmt);
+	ret = ft_vprintf(fmt, ap);
 	va_end(ap);
-	return (result);
+	return (ret);
 }
 
-int parse_format(const char *format, va_list ap)
+int	ft_vprintf(const char *fmt, va_list ap)
 {
-	int result;
-	int len;
+	int		ret;
+	ssize_t	written;
+	size_t	len;
+	t_fmt	flag;
 
-	result = 0;
-	while(*format)
+	ret = 0;
+	while (*fmt)
 	{
-		while (*format && *format == '%')
+		if (*fmt == '%')
 		{
-			format++;
-			result += handle_format(format, ap);
-			format++;
+			fmt++;
+			if (!parse_fmt(&fmt, &flag))
+				return (-1);
+			written = handle_spec(ap, &flag);
 		}
-		if (*format != '%')
+		else
 		{
-			len = strcspn_char(format, '%');
-			result += write(1, format, len);
-			format += len;
+			len = ft_strcspn_char(fmt, '%');
+			written = write(FD, fmt, len);
+			fmt += len;
 		}
+		if (written < 0 || written > INT_MAX || (int)written > (INT_MAX - ret))
+			return (-1);
+		ret += written;
 	}
-	return (result);
+	return (ret);
 }
 
-int	handle_format(const char *specifier, va_list ap)
+/*
+DESCRIPTION:
+	Returns the number of bytes in the initial part of 's' which precedes
+	the first occurrence of character 'c'. If 'c' is not found, returns
+	the length of the string.
+
+Equivalent to a simplified strcspn(const char *s, const char *charset);.
+*/
+size_t	ft_strcspn_char(const char *s, int c)
 {
-	if (*specifier == 'c')
-		return (ft_print_char(va_arg(ap, int)));
-	else if (*specifier == 's')
-		return (ft_print_string(va_arg(ap, char *)));
-	else if (*specifier == 'p')
-		return (ft_print_pointer(va_arg(ap, void *)));
-	else if (*specifier == 'd' || *specifier == 'i')	// 'i' does not detect base yet.
-		return (ft_print_integer(va_arg(ap, int)));
-	else if (*specifier == 'u')
-		return (ft_print_unsigned_integer(va_arg(ap, unsigned int)));	// negative integers should be printed as large positive numbers
-	else if (*specifier == 'x' || *specifier == 'X')
-		return (ft_print_hexadecimal(va_arg(ap, unsigned int), *specifier));
-	else if (*specifier == '%')
-		return (ft_print_percent());
-	return (0);
+	size_t	n;
+
+	n = 0;
+	while (s[n] && s[n] != (unsigned char)c)
+		n++;
+	return (n);
 }
-
-# include <stdio.h> // printf - remove
-
-int	main()
-{
-	int result;
-	// char *s	= "POINTER";
-	// long h	= 0x9e407d4e;
-	// long h2 = 0x10dc4ff0e;
-	// int sh	= 0xe;
-	// int i	= 0x10;
-	// result	= ft_printf("Hello, World!%c %sHello\n", 'A', "1234");
-	// printf(" ft_printf: %d\n", result);
-	// result = ft_printf("%d %i %u\n", +123, -123, -123);
-	// printf(" ft_printf: %d\n", result);
-	// result = ft_printf("%p %x %X %x %i %%\n", s, h, h2, sh, i);
-	// printf("%d\n", result);
-	// result =    printf("Hello, World!%c %sHello\n", 'A', "1234");
-	// printf("std_printf: %d\n", result);
-	// result = 	printf("%d %i %u\n", +123, -123, -123);
-	// printf("std_printf: %d\n", result);
-	// result = printf("%p %lx %lX %x %i %%\n", s, h, h2, sh, i);
-	// printf("%d\n", result);
-
-	result = ft_printf("%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %c%%", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0 ,0, 42, 0);
-	printf("\n%d\n", result);
-	result =  	printf("%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %c%%", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0 ,0, 42, 0);
-	printf("\n%d\n", result);
-}
-
-/// result greater than int max check-----
