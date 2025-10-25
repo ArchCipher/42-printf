@@ -69,19 +69,19 @@ DESCRIPTION
 	Returns 1 on valid specifier, 0 otherwise.
 
 	Values overwritten:
-		if align = '-' or dot -> pad = ' ' (0 is ignored)
-		if dot and precision = -1 -> precision = 0 (except for p)
+		if align = '-' or dot '.' -> pad = ' ' (0 is ignored)
+		if dot '.' and precision = -1 -> precision = 0 (except for p)
 		if spec = p -> precision = -1 (. is ignored for p)
 */
 
 int	normalise_fmt(const char **fmt, t_fmt *flag)
 {
-	if (flag->align == '-' || flag->dot)
-		flag->pad = ' ';
 	if (!ft_strchr(FMT_SPEC, **fmt))
 		return (0);
 	flag->spec = **fmt;
 	(*fmt)++;
+	if (flag->align == '-' || flag->dot || flag->spec == 'c' || flag->spec == 's' || flag->spec == '%')
+		flag->pad = ' ';
 	if (flag->dot && flag->precision == -1)
 		flag->precision = 0;
 	if (flag->spec == 'p')

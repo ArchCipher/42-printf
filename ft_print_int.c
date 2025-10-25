@@ -63,12 +63,6 @@ DESCRIPTION
 	If precision is 0 and number is 0, the number is not printed (except for p).
 */
 
-/*
-if (flag.width == INT_MAX || flag.precision == INT_MAX)
-return (-1);
-overflow_check for numbers.
-*/
-
 int print_nbr(char *num, int num_len, int prefix_len, t_fmt flag)
 {
 	int	pad_len;
@@ -93,7 +87,8 @@ int print_nbr(char *num, int num_len, int prefix_len, t_fmt flag)
 	num_written = write(FD, num, num_len);
 	if (flag.align == '-')
 		width_pad = print_pad(pad_len, flag.pad);
-	if (prefix_written < 0 || precision_pad < 0 || num_written < 0 || width_pad < 0)
+	if (prefix_written < 0 || precision_pad < 0 || num_written < 0 || width_pad < 0 || 
+		width_pad > INT_MAX - prefix_written || precision_pad > INT_MAX - width_pad - prefix_written || num_written > INT_MAX - width_pad - prefix_written - precision_pad)
 		return (-1);
 	return (width_pad + prefix_written + precision_pad + num_written);
 }
@@ -147,4 +142,11 @@ int	print_pad(int pad_len, char pad)
 			buf_len = pad_len - t_written;
 	}
 	return(t_written);
+}
+
+int	max(int a, int b)
+{
+	if (a > b)
+		return (a);
+	return (b);
 }

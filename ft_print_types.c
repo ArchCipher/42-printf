@@ -12,43 +12,41 @@
 
 #include "ft_printf.h"
 
-
 /*
 DESCRIPTION
 	Prints a single character with width formatting.
 	Returns the number of characters printed or -1 on error.
 
-	Values ignored: precision, dot, sign, hash
+	Values ignored: precision, dot, sign, hash, '0' pad
 */
 
 int	ft_print_char(char c, t_fmt flag)
 {	
-	int	space_pad;
-	int written;
+	int		space_pad;
+	ssize_t written;
 
 	space_pad = 0;
 	if (flag.align != '-')
-	space_pad = print_pad(max(0, flag.width - 1), flag.pad);
+		space_pad = print_pad(max(0, flag.width - 1), flag.pad);
 	written = write(FD, &c, 1);
 	if (flag.align == '-')
-	space_pad = print_pad(max(0, flag.width - 1), flag.pad);
+		space_pad = print_pad(max(0, flag.width - 1), flag.pad);
 	if (space_pad < 0 || written < 0)
 		return (-1);
-	return (space_pad + written);
+	return (space_pad + (int)written);
 }
 
 /*
 DESCRIPTION
 	Prints a string with width and precision formatting.
-	NULL strings are replaced with "(null)". (printf doesn't compile if NULL is passed)
+	NULL strings are replaced with "(null)".
 	Returns the number of characters printed or -1 on error.
 
-	Values ignored: sign, hash
+	Values ignored: sign, hash, '0' pad
 */
 
 int	ft_print_str(char *s, t_fmt flag)
 {
-	size_t	t_written;
 	ssize_t	written;
 	int		pad_len;
 	int		width_pad;
@@ -57,26 +55,21 @@ int	ft_print_str(char *s, t_fmt flag)
 	if (!s)
 		s = "(null)";
 	len = ft_strlen(s);
-	if (flag.dot)
-		len = min(len, (size_t)flag.precision);
 	pad_len = 0;
+	if (flag.dot && (size_t)flag.precision < len)
+		len = flag.precision;
 	if ((size_t)flag.width > len)
 		pad_len = flag.width - len;
+	if (len > INT_MAX || (size_t)pad_len > INT_MAX - len)
+		return (-1);
 	if (flag.align != '-')
 		width_pad = print_pad(pad_len, flag.pad);
-	t_written = 0;
-	while (t_written < len)
-	{
-		written = write(FD, s + t_written, len - t_written);
-		if (written < 0 || written > INT_MAX || (size_t)written > (INT_MAX - t_written))
-			return (-1);
-		t_written += written;
-	}
+	written = write(FD, s, len);
 	if (flag.align == '-')
 		width_pad = print_pad(pad_len, flag.pad);
-	if (width_pad < 0 || (size_t)width_pad > (INT_MAX - t_written))
+	if (width_pad < 0 || written < 0 || written != (ssize_t) len || (int)written > INT_MAX - width_pad)
 		return (-1);
-	return (width_pad + t_written);
+	return (width_pad + (int)written);
 }
 
 /*
@@ -92,18 +85,4 @@ int	ft_print_int(int i, t_fmt *flag)
 		return (ft_itoa_base((unsigned int)i, 10, *flag));
 	flag->sign = '-';
 	return (ft_itoa_base((unsigned int)(0u - (unsigned int)i), 10, *flag));
-}
-
-int	max(int a, int b)
-{
-	if (a > b)
-		return (a);
-	return (b);
-}
-
-int	min(int a, int b)
-{
-	if (a < b)
-		return (a);
-	return (b);
 }

@@ -17,6 +17,22 @@ int	ft_isdigit(int c)
 	return (c >= '0' && c <= '9');
 }
 
+
+int	ft_atoi(const char *str)
+{
+	int	num;
+
+	num = 0;
+	while (ft_isdigit(*str))
+	{
+		if (num * 10 > INT_MAX - (*str - '0'))
+			return (INT_MAX);
+		num = (num * 10) + (*str - '0');
+		str++;
+	}
+	return (num);
+}
+
 size_t	ft_strlen(const char *s)
 {
 	size_t	n;
@@ -53,17 +69,3 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-int	ft_atoi(const char *str)
-{
-	int	num;
-
-	num = 0;
-	while (ft_isdigit(*str))
-	{
-		if (num > INT_MAX / 10)
-			return (INT_MAX);
-		num = (num * 10) + (*str - '0');
-		str++;
-	}
-	return (num);
-}

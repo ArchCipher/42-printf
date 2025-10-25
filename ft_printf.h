@@ -28,13 +28,13 @@
 
 typedef struct s_fmt
 {
-	char    align;    // '-'
-	char    pad;      // ' ' or '0'
-	char    sign;     // '+' or ' '
+	char    align;
+	char    pad;
+	char    sign;
 	char    hash;
-	int     width;     // min field width
+	int     width;
 	char    dot;
-	int     precision; // precision after .
+	int     precision;
 	char	spec;
 }		    t_fmt;
 
@@ -50,24 +50,23 @@ void	parse_int(const char **fmt, int *i);
 int		normalise_fmt(const char **fmt, t_fmt *flag);
 int		handle_spec(va_list ap, t_fmt *flag);
 
-// print spec
+// print types
 int		ft_print_char(char c, t_fmt flag);
 int		ft_print_str(char *s, t_fmt flag);
 int		ft_print_int(int i, t_fmt *flag);
-int		max(int a, int b);
-int		min(int a, int b);
 
 // print int
 int		ft_itoa_base(unsigned long long n, int base, t_fmt flag);
 int		print_nbr(char *num, int num_len, int prefix_len, t_fmt flag);
 int		print_prefix(t_fmt flag, char *num);
 int		print_pad(int pad_len, char pad);
+int		max(int a, int b);
 
 //printf_utils
 int		ft_isdigit(int c);
+int		ft_atoi(const char *str);
 size_t	ft_strlen(const char *s);
 void	*ft_memset(void *b, int c, size_t len);
 char	*ft_strchr(const char *s, int c);
-int		ft_atoi(const char *str);
 
 #endif

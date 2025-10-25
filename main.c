@@ -5,10 +5,11 @@ int	main(void)
 {
 	int	result;
 
-	// result	= ft_printf("Hello, World!%5c %-10.5s %.2s %s %s\n", 'A', "1234", "Hello", "", NULL);
-	// printf(" ft_printf: %d\n", result);
-	// result =    printf("Hello, World!%5c %-10.5s %.2s %s\n", 'A', "1234", "Hello", "");
-	// printf("std_printf: %d\n\n", result);
+	char *null_str = NULL;
+	result	= ft_printf("Hello, World!%5c %-10.5s %.2s %s '%s' %s\n", 'A', "1234", "Hello", "Hello", "", null_str);
+	printf(" ft_printf: %d\n", result);
+	result =    printf("Hello, World!%5c %-10.5s %.2s %s '%s' %s\n", 'A', "1234", "Hello", "Hello", "", null_str);
+	printf("std_printf: %d\n\n", result);
 
 	// result = ft_printf("%+d %i %u\n", +123, -123, -123);
 	// printf(" ft_printf: %d\n\n", result);
@@ -57,10 +58,10 @@ int	main(void)
 	// result = printf("'%5.0d' %2147483630d", 0, 42);
 	// printf("std_printf: %d\n\n", result);
 
-	result = ft_printf("%x\n", 42);
-	printf("%d\n", result);
-	result = printf("%x\n", 42);
-	printf("%d\n", result);
+	// result = ft_printf("%x\n", 42);
+	// printf("%d\n", result);
+	// result = printf("%x\n", 42);
+	// printf("%d\n", result);
 
 	// int n = -42;
 	// unsigned int a = (unsigned int)(0u - (unsigned int)n);

@@ -78,8 +78,6 @@ int	ft_vprintf(const char *fmt, va_list ap)
 	return (ret);
 }
 
-// check for char overflow when direct printing
-
 int print_literal(const char **fmt)
 {
 	ssize_t	written;
@@ -99,8 +97,9 @@ DESCRIPTION:
 	the first occurrence of character 'c'. If 'c' is not found, returns
 	the length of the string.
 
-Equivalent to a simplified strcspn(const char *s, const char *charset);.
+	Simplified version of strcspn(const char *s, const char *charset);
 */
+
 size_t	ft_strcspn_char(const char *s, int c)
 {
 	size_t	n;
