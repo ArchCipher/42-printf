@@ -6,11 +6,15 @@
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 12:27:53 by kmurugan          #+#    #+#             */
-/*   Updated: 2025/10/23 19:09:27 by kmurugan         ###   ########.fr       */
+/*   Updated: 2025/11/19 17:50:15 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+static int		ft_vprintf(const char *fmt, va_list ap);
+static int		print_literal(const char **fmt);
+static size_t	ft_strcspn_char(const char *s, int c);
 
 /*
 	NAME
@@ -53,7 +57,7 @@ int	ft_printf(const char *fmt, ...)
 	return (ret);
 }
 
-int	ft_vprintf(const char *fmt, va_list ap)
+static int	ft_vprintf(const char *fmt, va_list ap)
 {
 	int		ret;
 	ssize_t	written;
@@ -78,7 +82,7 @@ int	ft_vprintf(const char *fmt, va_list ap)
 	return (ret);
 }
 
-int print_literal(const char **fmt)
+static int	print_literal(const char **fmt)
 {
 	ssize_t	written;
 	size_t	len;
@@ -100,7 +104,7 @@ DESCRIPTION:
 	Simplified version of strcspn(const char *s, const char *charset);
 */
 
-size_t	ft_strcspn_char(const char *s, int c)
+static size_t	ft_strcspn_char(const char *s, int c)
 {
 	size_t	n;
 

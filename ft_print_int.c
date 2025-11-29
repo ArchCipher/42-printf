@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
+/*   ft_print_int.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 12:38:21 by kmurugan          #+#    #+#             */
-/*   Updated: 2025/10/23 18:57:20 by kmurugan         ###   ########.fr       */
+/*   Updated: 2025/11/19 17:48:37 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
+static int	print_nbr(char *num, int num_len, int prefix_len, t_fmt flag);
+static int	print_prefix(t_fmt flag, char *num);
+static int	check_error_overflow(int width_pad, int precision_pad,
+				int prefix_written, int num_written);
+
 /*
 DESCRIPTION
-	Converts unsigned number to string in given base and prints it with formatting
-	(sign/prefix, width, precision, alignment).
+	Converts unsigned number to string in given base and prints it with
+	formatting (sign/prefix, width, precision, alignment).
 	Returns the number of characters printed or -1 on error.
 */
 
@@ -28,7 +33,8 @@ int	ft_itoa_base(unsigned long long n, int base, t_fmt flag)
 	i = BUF_SIZE;
 	num[i] = '\0';
 	prefix_len = 0;
-	if (flag.spec == 'p' || (flag.hash && n != 0 && (flag.spec == 'x' || flag.spec == 'X')))
+	if (flag.spec == 'p' || (flag.hash && n != 0 && (flag.spec == 'x'
+				|| flag.spec == 'X')))
 		prefix_len = 2;
 	else if (flag.sign)
 		prefix_len = 1;
@@ -63,34 +69,33 @@ DESCRIPTION
 	If precision is 0 and number is 0, the number is not printed (except for p).
 */
 
-int print_nbr(char *num, int num_len, int prefix_len, t_fmt flag)
+static int	print_nbr(char *num, int num_len, int prefix_len, t_fmt flag)
 {
 	int	pad_len;
-	int width_pad;
-	int prefix_written;
-	int	precision_pad;
+	int	width_pad;
+	int	prefix_written;
+	int	prec_pad;
 	int	num_written;
 
 	width_pad = 0;
-	precision_pad = 0;
+	prec_pad = 0;
 	num_written = 0;
 	if (flag.dot && flag.precision == 0 && *num == '0')
 		num_len = 0;
-	pad_len = max (0, flag.width - (prefix_len + max(num_len, flag.precision)));
+	pad_len = max(0, flag.width - (prefix_len + max(num_len, flag.precision)));
 	if (flag.align != '-' && flag.pad == ' ')
 		width_pad = print_pad(pad_len, flag.pad);
 	prefix_written = print_prefix(flag, num);
 	if (flag.align != '-' && flag.pad == '0')
 		width_pad = print_pad(pad_len, flag.pad);
 	if (flag.dot && flag.precision > num_len && flag.spec != 'p')
-		precision_pad = print_pad(flag.precision - num_len, '0');
+		prec_pad = print_pad(flag.precision - num_len, '0');
 	num_written = write(FD, num, num_len);
 	if (flag.align == '-')
 		width_pad = print_pad(pad_len, flag.pad);
-	if (prefix_written < 0 || precision_pad < 0 || num_written < 0 || width_pad < 0 || 
-		width_pad > INT_MAX - prefix_written || precision_pad > INT_MAX - width_pad - prefix_written || num_written > INT_MAX - width_pad - prefix_written - precision_pad)
+	if (check_error_overflow(width_pad, prec_pad, prefix_written, num_written))
 		return (-1);
-	return (width_pad + prefix_written + precision_pad + num_written);
+	return (width_pad + prefix_written + prec_pad + num_written);
 }
 
 /*
@@ -101,7 +106,7 @@ DESCRIPTION
 	For hexadecimal with # flag, prefix is not printed if value is 0.
 */
 
-int	print_prefix(t_fmt flag, char *num)
+static int	print_prefix(t_fmt flag, char *num)
 {
 	if (flag.spec == 'p' || (flag.hash && *num != '0' && flag.spec == 'x'))
 		return (write(FD, "0x", 2));
@@ -122,7 +127,7 @@ int	print_pad(int pad_len, char pad)
 {
 	char	buf[BUF_SIZE + 1];
 	int		written;
-	int 	t_written;
+	int		t_written;
 	int		buf_len;
 
 	if (pad_len <= 0)
@@ -141,12 +146,16 @@ int	print_pad(int pad_len, char pad)
 		if (t_written < pad_len && buf_len > pad_len - t_written)
 			buf_len = pad_len - t_written;
 	}
-	return(t_written);
+	return (t_written);
 }
 
-int	max(int a, int b)
+static int	check_error_overflow(int width_pad, int precision_pad,
+		int prefix_written, int num_written)
 {
-	if (a > b)
-		return (a);
-	return (b);
+	if (prefix_written < 0 || precision_pad < 0 || num_written < 0
+		|| width_pad < 0 || width_pad > INT_MAX - prefix_written
+		|| precision_pad > INT_MAX - width_pad - prefix_written
+		|| num_written > INT_MAX - width_pad - prefix_written - precision_pad)
+		return (1);
+	return (0);
 }

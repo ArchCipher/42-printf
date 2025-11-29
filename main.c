@@ -53,10 +53,10 @@ int	main(void)
 	// result = printf("%+05d %-8d %08d %8.3d %.d %#08x '%#0x' '%#0x'\n", 7, 7, 7, 7, 0, 7, 42, 0);
 	// printf("%d\n", result);
 
-	// result = ft_printf("'%5.0d' %2147483630d\n", 0, 42);
-	// printf(" ft_printf: %d\n", result);
-	// result = printf("'%5.0d' %2147483630d", 0, 42);
-	// printf("std_printf: %d\n\n", result);
+	result = ft_printf("'%5.0d' %2147483647d\n", 0, 42);
+	printf(" ft_printf: %d\n", result);
+	result = printf("'%5.0d' %2147483647d", 0, 42);
+	printf("std_printf: %d\n\n", result);
 
 	// result = ft_printf("%x\n", 42);
 	// printf("%d\n", result);

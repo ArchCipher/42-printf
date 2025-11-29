@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
+/*   ft_print_types.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 12:38:21 by kmurugan          #+#    #+#             */
-/*   Updated: 2025/10/23 18:57:20 by kmurugan         ###   ########.fr       */
+/*   Updated: 2025/11/19 17:40:11 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ DESCRIPTION
 */
 
 int	ft_print_char(char c, t_fmt flag)
-{	
+{
 	int		space_pad;
-	ssize_t written;
+	ssize_t	written;
 
 	space_pad = 0;
 	if (flag.align != '-')
@@ -67,11 +67,11 @@ int	ft_print_str(char *s, t_fmt flag)
 	written = write(FD, s, len);
 	if (flag.align == '-')
 		width_pad = print_pad(pad_len, flag.pad);
-	if (width_pad < 0 || written < 0 || written != (ssize_t) len || (int)written > INT_MAX - width_pad)
+	if (width_pad < 0 || written < 0 || written != (ssize_t)len
+		|| (int)written > INT_MAX - width_pad)
 		return (-1);
 	return (width_pad + (int)written);
 }
-
 /*
 DESCRIPTION
 	Converts signed integer to unsigned and prints it.
@@ -85,4 +85,11 @@ int	ft_print_int(int i, t_fmt *flag)
 		return (ft_itoa_base((unsigned int)i, 10, *flag));
 	flag->sign = '-';
 	return (ft_itoa_base((unsigned int)(0u - (unsigned int)i), 10, *flag));
+}
+
+int	max(int a, int b)
+{
+	if (a > b)
+		return (a);
+	return (b);
 }

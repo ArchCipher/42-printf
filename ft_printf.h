@@ -6,7 +6,7 @@
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 12:27:51 by kmurugan          #+#    #+#             */
-/*   Updated: 2025/10/23 18:55:05 by kmurugan         ###   ########.fr       */
+/*   Updated: 2025/11/19 17:40:25 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,45 +28,38 @@
 
 typedef struct s_fmt
 {
-	char    align;
-	char    pad;
-	char    sign;
-	char    hash;
-	int     width;
-	char    dot;
-	int     precision;
+	char	align;
+	char	pad;
+	char	sign;
+	char	hash;
+	int		width;
+	char	dot;
+	int		precision;
 	char	spec;
-}		    t_fmt;
+}			t_fmt;
 
 // ft_printf
-int		ft_printf(const char *fmt, ...);
-int		ft_vprintf(const char *fmt, va_list ap);
-int		print_literal(const char **fmt);
-size_t	ft_strcspn_char(const char *s, int c);
+int			ft_printf(const char *fmt, ...);
 
-// lexer
-int		parse_fmt(const char **fmt, t_fmt *flag);
-void	parse_int(const char **fmt, int *i);
-int		normalise_fmt(const char **fmt, t_fmt *flag);
-int		handle_spec(va_list ap, t_fmt *flag);
+// parser
+int			parse_fmt(const char **fmt, t_fmt *flag);
+int			handle_spec(va_list ap, t_fmt *flag);
 
 // print types
-int		ft_print_char(char c, t_fmt flag);
-int		ft_print_str(char *s, t_fmt flag);
-int		ft_print_int(int i, t_fmt *flag);
+int			ft_print_char(char c, t_fmt flag);
+int			ft_print_str(char *s, t_fmt flag);
+int			ft_print_int(int i, t_fmt *flag);
+int			max(int a, int b);
 
 // print int
-int		ft_itoa_base(unsigned long long n, int base, t_fmt flag);
-int		print_nbr(char *num, int num_len, int prefix_len, t_fmt flag);
-int		print_prefix(t_fmt flag, char *num);
-int		print_pad(int pad_len, char pad);
-int		max(int a, int b);
+int			ft_itoa_base(unsigned long long n, int base, t_fmt flag);
+int			print_pad(int pad_len, char pad);
 
-//printf_utils
-int		ft_isdigit(int c);
-int		ft_atoi(const char *str);
-size_t	ft_strlen(const char *s);
-void	*ft_memset(void *b, int c, size_t len);
-char	*ft_strchr(const char *s, int c);
+// printf_utils
+int			ft_isdigit(int c);
+int			ft_atoi_positive(const char *str);
+size_t		ft_strlen(const char *s);
+void		*ft_memset(void *b, int c, size_t len);
+char		*ft_strchr(const char *s, int c);
 
 #endif

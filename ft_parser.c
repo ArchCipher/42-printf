@@ -1,16 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
+/*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 12:38:21 by kmurugan          #+#    #+#             */
-/*   Updated: 2025/10/23 18:57:20 by kmurugan         ###   ########.fr       */
+/*   Updated: 2025/11/19 17:35:44 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+static void	parse_int(const char **fmt, int *i);
+static int	normalise_fmt(const char **fmt, t_fmt *flag);
 
 /*
 DESCRIPTION
@@ -47,7 +50,7 @@ int	parse_fmt(const char **fmt, t_fmt *flag)
 		(*fmt)++;
 		parse_int(fmt, &flag->precision);
 	}
-	return(normalise_fmt(fmt, flag));
+	return (normalise_fmt(fmt, flag));
 }
 
 /*
@@ -55,11 +58,11 @@ DESCRIPTION
 	Parses an integer from the format string and advances pointer.
 */
 
-void	parse_int(const char **fmt, int *i)
+static void	parse_int(const char **fmt, int *i)
 {
 	if (ft_isdigit(**fmt))
-		*i = ft_atoi(*fmt);
-	while(ft_isdigit(**fmt))
+		*i = ft_atoi_positive(*fmt);
+	while (ft_isdigit(**fmt))
 		(*fmt)++;
 }
 
@@ -74,13 +77,14 @@ DESCRIPTION
 		if spec = p -> precision = -1 (. is ignored for p)
 */
 
-int	normalise_fmt(const char **fmt, t_fmt *flag)
+static int	normalise_fmt(const char **fmt, t_fmt *flag)
 {
 	if (!ft_strchr(FMT_SPEC, **fmt))
 		return (0);
 	flag->spec = **fmt;
 	(*fmt)++;
-	if (flag->align == '-' || flag->dot || flag->spec == 'c' || flag->spec == 's' || flag->spec == '%')
+	if (flag->align == '-' || flag->dot || flag->spec == 'c'
+		|| flag->spec == 's' || flag->spec == '%')
 		flag->pad = ' ';
 	if (flag->dot && flag->precision == -1)
 		flag->precision = 0;
@@ -102,7 +106,8 @@ int	handle_spec(va_list ap, t_fmt *flag)
 	else if (flag->spec == 's')
 		return (ft_print_str(va_arg(ap, char *), *flag));
 	else if (flag->spec == 'p')
-		return (ft_itoa_base((unsigned long long)va_arg(ap, void *), 16, *flag));
+		return (ft_itoa_base((unsigned long long)va_arg(ap, void *), 16,
+				*flag));
 	else if (flag->spec == 'd' || flag->spec == 'i')
 		return (ft_print_int(va_arg(ap, int), flag));
 	else if (flag->spec == 'u')

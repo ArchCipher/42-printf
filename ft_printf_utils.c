@@ -6,7 +6,7 @@
 /*   By: kmurugan <kmurugan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 12:38:21 by kmurugan          #+#    #+#             */
-/*   Updated: 2025/10/23 18:57:20 by kmurugan         ###   ########.fr       */
+/*   Updated: 2025/11/19 17:51:03 by kmurugan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,14 @@ int	ft_isdigit(int c)
 	return (c >= '0' && c <= '9');
 }
 
-
-int	ft_atoi(const char *str)
+int	ft_atoi_positive(const char *str)
 {
 	int	num;
 
 	num = 0;
 	while (ft_isdigit(*str))
 	{
-		if (num * 10 > INT_MAX - (*str - '0'))
+		if (INT_MAX - num * 10 <= (*str - '0'))
 			return (INT_MAX);
 		num = (num * 10) + (*str - '0');
 		str++;
@@ -68,4 +67,3 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)s);
 	return (NULL);
 }
-
