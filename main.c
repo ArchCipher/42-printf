@@ -1,4 +1,4 @@
-#include <stdio.h> // printf - remove
+#include <stdio.h> // printf
 #include "ft_printf.h"
 
 int	main(void)

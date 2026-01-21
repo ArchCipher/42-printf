@@ -1,9 +1,7 @@
-#add header for all files
-
 #			Library and Project names
 NAME		= libftprintf.a
-DPRINTF_LIB	= libftdprintf.a
-LIB_DIR		= ../ft_dprintf/
+VDPRINTF_LIB	= libftvdprintf.a
+LIB_DIR		= ../ft_vdprintf/
 
 #			Compiler and Flags
 CC			= cc
@@ -14,7 +12,7 @@ SFLAGS		= -fsanitize=address
 ALL_HEADERS	= -I$(LIB_DIR) -I.
 
 #			Sources & Objects
-SRCS = ft_printf.c
+SRCS 	= ft_printf.c
 OBJS	= $(SRCS:.c=.o)
 
 %.o: %.c
@@ -26,7 +24,7 @@ lib:
 	@make -C $(LIB_DIR)
 
 $(NAME): $(OBJS)
-	@cp $(LIB_DIR)$(DPRINTF_LIB) $@
+	@cp $(LIB_DIR)$(VDPRINTF_LIB) $@
 	ar r $@ $(OBJS)
 
 test: lib $(NAME)
