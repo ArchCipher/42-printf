@@ -4,4 +4,4 @@ libftprintf.a
 *.out
 *.out.dSYM/
 .DS_Store
-.vscode/
+.vscode
