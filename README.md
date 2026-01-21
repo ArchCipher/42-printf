@@ -155,24 +155,7 @@ gcc your_program.c -L./ft_printf -lftprintf -o your_program
 ```
 
 **Example Usage:**
-```c
-#include "ft_printf/ft_printf.h"
-
-int main(void)
-{
-    int count;
-    
-    count = ft_printf("Hello, %s! You are %d years old.\n", "World", 42);
-    ft_printf("Printed %d characters\n", count);
-    
-    // Using dprintf for file output
-    int fd = open("output.txt", O_WRONLY | O_CREAT, 0644);
-    ft_dprintf(fd, "Writing to file: %s\n", "test");
-    close(fd);
-    
-    return (0);
-}
-```
+See [`main.c`](main.c) for example usage demonstrating various format specifiers and test cases.
 
 ---
 
@@ -196,30 +179,6 @@ int main(void)
 - Returns -1 on write errors
 - Handles NULL pointers gracefully
 - Validates format string syntax
-
----
-
-## Key Challenges & Solutions
-
-### Challenge 1: Variadic Argument Handling
-**Problem:** Extracting arguments of different types safely  
-**Solution:** Used `va_arg` with correct type casting, handled each specifier type appropriately
-
-### Challenge 2: Format String Parsing
-**Problem:** Complex format string with flags, width, precision, specifiers  
-**Solution:** Implemented state machine parser that processes format string character by character
-
-### Challenge 3: Number Formatting
-**Problem:** Converting numbers to strings with proper padding, precision, and flags  
-**Solution:** Built conversion function that handles all formatting requirements before output
-
-### Challenge 4: Platform Compatibility
-**Problem:** NULL pointer output differs between Linux and macOS  
-**Solution:** Used preprocessor directives to define platform-specific behavior
-
-### Challenge 5: Modular Architecture
-**Problem:** Building printf on top of dprintf without code duplication  
-**Solution:** Created wrapper function that calls dprintf with STDOUT_FILENO, shared all core logic
 
 ---
 
