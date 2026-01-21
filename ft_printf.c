@@ -49,7 +49,7 @@ int	ft_printf(const char *fmt, ...)
 	va_list	ap;
 
 	va_start(ap, fmt);
-	ret = ft_dprintf(STDOUT_FILENO, fmt, ap);
+	ret = ft_vdprintf(STDOUT_FILENO, fmt, ap);
 	va_end(ap);
 	return (ret);
 }
