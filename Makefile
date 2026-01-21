@@ -2,6 +2,8 @@
 
 #			Library and Project names
 NAME		= libftprintf.a
+DPRINTF_LIB	= libftdprintf.a
+LIB_DIR		= ../ft_dprintf/
 
 #			Compiler and Flags
 CC			= cc
@@ -9,34 +11,36 @@ FLAGS		= -Wall -Werror -Wextra
 SFLAGS		= -fsanitize=address
 
 #			Headers
-ALL_HEADERS	= -I.
+ALL_HEADERS	= -I$(LIB_DIR) -I.
 
 #			Sources & Objects
-MSRCS = \
-	   printf parser print_types print_int printf_utils
-SRCS = $(addprefix ft_, $(addsuffix .c, $(MSRCS)))
+SRCS = ft_printf.c
 OBJS	= $(SRCS:.c=.o)
 
 %.o: %.c
 	$(CC) $(FLAGS) $(ALL_HEADERS) -c $< -o $@
 
-all: $(NAME)
+all: lib $(NAME)
+
+lib:
+	@make -C $(LIB_DIR)
 
 $(NAME): $(OBJS)
-	ar rcs $@ $(OBJS)
+	@cp $(LIB_DIR)$(DPRINTF_LIB) $@
+	ar r $@ $(OBJS)
 
-bonus: $(NAME)
-
-test: $(NAME)
-	$(CC) $(FLAGS) -g $(ALL_HEADERS) $(SRCS) $(NAME) main.c -o a.out
+test: lib $(NAME)
+	$(CC) $(FLAGS) -g $(ALL_HEADERS) main.c $(NAME) -o a.out
 	./a.out | cat -e
 
 clean:
 	rm -f $(OBJS)
+	@make -C $(LIB_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
+	@make -C $(LIB_DIR) fclean
 
 re: fclean all
 
-.PHONY: all clean fclean test
+.PHONY: all clean fclean test lib

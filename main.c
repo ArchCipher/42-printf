@@ -6,9 +6,14 @@ int	main(void)
 	int	result;
 
 	char *null_str = NULL;
-	result	= ft_printf("Hello, World!%5c %-10.5s %.2s %s '%s' %s\n", 'A', "1234", "Hello", "Hello", "", null_str);
+	// result	= ft_printf("Hello, World!%5c %-10.5s %.2s %s '%s' %s\n", 'A', "1234", "Hello", "Hello", "", null_str);
+	// printf(" ft_printf: %d\n", result);
+	// result =    printf("Hello, World!%5c %-10.5s %.2s %s '%s' %s\n", 'A', "1234", "Hello", "Hello", "", null_str);
+	// printf("std_printf: %d\n\n", result);
+
+	result	= ft_printf("%p", null_str);
 	printf(" ft_printf: %d\n", result);
-	result =    printf("Hello, World!%5c %-10.5s %.2s %s '%s' %s\n", 'A', "1234", "Hello", "Hello", "", null_str);
+	result =    printf("%p", null_str);
 	printf("std_printf: %d\n\n", result);
 
 	// result = ft_printf("%+d %i %u\n", +123, -123, -123);
@@ -53,10 +58,11 @@ int	main(void)
 	// result = printf("%+05d %-8d %08d %8.3d %.d %#08x '%#0x' '%#0x'\n", 7, 7, 7, 7, 0, 7, 42, 0);
 	// printf("%d\n", result);
 
-	result = ft_printf("'%5.0d' %2147483647d\n", 0, 42);
-	printf(" ft_printf: %d\n", result);
-	result = printf("'%5.0d' %2147483647d", 0, 42);
-	printf("std_printf: %d\n\n", result);
+	// !!! WARNING: prints forever (INT MAX) !!!
+	// result = ft_printf("'%5.0d' %2147483647d\n", 0, 42);
+	// printf(" ft_printf: %d\n", result);
+	// result = printf("'%5.0d' %2147483647d", 0, 42);
+	// printf("std_printf: %d\n\n", result);
 
 	// result = ft_printf("%x\n", 42);
 	// printf("%d\n", result);
